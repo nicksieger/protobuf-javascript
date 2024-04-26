@@ -263,12 +263,20 @@ char ToLowerASCII(char c) {
 std::vector<std::string> ParseLowerUnderscore(const std::string& input) {
   std::vector<std::string> words;
   std::string running = "";
+  bool underscores = input.find('_') != std::string::npos;
+
   for (int i = 0; i < input.size(); i++) {
-    if (input[i] == '_') {
+    if (underscores && input[i] == '_') {
       if (!running.empty()) {
         words.push_back(running);
         running.clear();
       }
+    } else if (!underscores && input[i] >= 'A' && input[i] <= 'Z') {
+      if (!running.empty()) {
+        words.push_back(running);
+        running.clear();
+      }
+      running += ToLowerASCII(input[i]);
     } else {
       running += ToLowerASCII(input[i]);
     }
